@@ -11,9 +11,7 @@ path('admin/', admin.site.urls),
     path('', include('marks_app.urls')),
     path('admin/', admin.site.urls),
     # Include your existing URLs
-    path('', include('students_app.urls')),  # Existing student app URLs
-    # Include the new marks app URLs
-    path('', include('marks_app.urls')),
+    path('api/', include('marks_app.urls')),
 
 ]
 
