@@ -1,0 +1,96 @@
+<!-- Create this file in your templates directory: student_results_pdf.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <style>
+        @page {
+            size: landscape;
+            margin: 1cm;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .class-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            text-align: center;
+            background-color: #f0f0f0;
+            padding: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #333;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>{{ title }}</h1>
+        <p>Generated on {% now "F j, Y" %}</p>
+    </div>
+
+    {% for class_name, students in class_groups.items %}
+    <div class="class-title">Class: {{ class_name }}</div>
+    <table>
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Math</th>
+                <th>English</th>
+                <th>Kiswahili</th>
+                <th>Science</th>
+                <th>SST</th>
+                <th>Average (Grade)</th>
+                <th>Total Marks</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td>{{ student.student_name }}</td>
+                <td>{{ student.math_marks }} {{ student.math_grade }}</td>
+                <td>{{ student.english_marks }} {{ student.english_grade }}</td>
+                <td>{{ student.kiswahili_marks }} {{ student.kiswahili_grade }}</td>
+                <td>{{ student.science_marks }} {{ student.science_grade }}</td>
+                <td>{{ student.sst_marks }} {{ student.sst_grade }}</td>
+                 <td>{{ student.average }} {{ student.avg_grade }}</td>
+                <td>{{ student.total_marks }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endfor %}
+
+    <div class="footer">
+        <p>End of Report</p>
+    </div>
+</body>
+</html>
