@@ -25,9 +25,7 @@ SECRET_KEY = 'django-insecure-5@6#)3gv+tz4qbvj6+oxk28bmavj@%0(m6_y3ood%^@4ks!8nq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-
-]
+ALLOWED_HOSTS = ['*',]
 
 
 # Application definition
@@ -46,6 +44,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'grading_system',
     'pdf_reports',
+    'login'
 ]
 
 MIDDLEWARE = [
@@ -149,5 +148,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_ALL_ORIGINS = True
 
 LOGIN_URL = '/admin/login/'
+
+# your_project/settings.py
+
+# Supabase Configuration
+SUPABASE_URL = "https://your-project-id.supabase.co"
+SUPABASE_KEY = "your-service-role-key"  # Use service_role key for backend
 
 

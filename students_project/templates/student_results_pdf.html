@@ -62,6 +62,7 @@
     <table>
         <thead>
             <tr>
+                <th>Position</th>
                 <th>Student Name</th>
                 <th>Math</th>
                 <th>English</th>
@@ -75,13 +76,14 @@
         <tbody>
             {% for student in students %}
             <tr>
+                <td>{{ student.position }}</td>
                 <td>{{ student.student_name }}</td>
                 <td>{{ student.math_marks }} {{ student.math_grade }}</td>
                 <td>{{ student.english_marks }} {{ student.english_grade }}</td>
                 <td>{{ student.kiswahili_marks }} {{ student.kiswahili_grade }}</td>
                 <td>{{ student.science_marks }} {{ student.science_grade }}</td>
                 <td>{{ student.sst_marks }} {{ student.sst_grade }}</td>
-                 <td>{{ student.average }} {{ student.avg_grade }}</td>
+                <td>{{ student.average }} {{ student.avg_grade }}</td>
                 <td>{{ student.total_marks }}</td>
             </tr>
             {% endfor %}

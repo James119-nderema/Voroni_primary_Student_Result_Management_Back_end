@@ -121,3 +121,11 @@ def add_class(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET'])
+def student_count(request):
+    """
+    Get the total number of students in the database
+    """
+    count = Student.objects.count()
+    return Response({'count': count})

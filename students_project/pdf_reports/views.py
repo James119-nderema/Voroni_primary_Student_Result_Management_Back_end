@@ -16,7 +16,7 @@ from students_app.models import Student
 from grading_system.models import StudentMarks
 # Import the Report model from models.py instead of defining it here
 from .models import Report
-from .utils import process_student_marks, render_to_pdf, save_pdf
+from .utils import get_class_results, render_to_pdf, save_pdf
 
 
 def generate_results_report(request, report_type='all', class_name=None, student_id=None):
@@ -29,31 +29,35 @@ def generate_results_report(request, report_type='all', class_name=None, student
         students = [student]
         title = f"Results Report for {student.first_name} {student.last_name}"
         filename = f"student_{student_id}_report"
+        # For single student reports, create a dictionary with one class entry
+        students_by_class = {student.class_name: students}
     elif report_type == 'class' and class_name:
         students = Student.objects.filter(class_name=class_name).order_by('first_name', 'last_name')
         title = f"Results Report for Class {class_name}"
         filename = f"class_{class_name}_report"
+        # For class reports, create a dictionary with one class entry
+        students_by_class = {class_name: students}
     else:
-        students = Student.objects.all().order_by('class_name', 'first_name', 'last_name')
+        # For all students, group by class
+        students_by_class = {}
+        all_students = Student.objects.all().order_by('class_name', 'first_name', 'last_name')
+
+        for student in all_students:
+            if student.class_name not in students_by_class:
+                students_by_class[student.class_name] = []
+            students_by_class[student.class_name].append(student)
+
         filename = "all_students_report"
 
-    # Group students by class
-    class_groups = {}
+    # Skip empty classes
+    students_by_class = {cls: students for cls, students in students_by_class.items() if students}
 
-    for student in students:
-        # Get all marks for this student
-        marks = StudentMarks.objects.filter(student_id=student.id)
+    # Only process if we have students
+    if not students_by_class:
+        return HttpResponse('No students found with marks', status=404)
 
-        if not marks.exists():
-            continue  # Skip students with no marks
-
-        current_class = student.class_name
-
-        if current_class not in class_groups:
-            class_groups[current_class] = []
-
-        student_data = process_student_marks(student, marks)
-        class_groups[current_class].append(student_data)
+    # Process results with ranking by class
+    class_groups = get_class_results(students_by_class, StudentMarks)
 
     # Prepare context for the template
     context = {
